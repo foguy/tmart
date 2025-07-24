@@ -94,7 +94,7 @@ class Atmosphere():
         self.layers_alts_top = np.linspace(self.layer_height, self.atm_height , self.n_layers)  
         
         # Calculate tau in each layer and extract the molecular profile at one wavelength 
-        layers_ot_molecule, layers_ot_rayleigh = self._atm_profile_wl(band)
+        layers_ot_molecule, layers_ot_rayleigh, T_gaz_total = self._atm_profile_wl(band)
         
         # ot_mie is aerosol scattering, ot_aerosol is aerosol absorption 
         layers_ot_mie, layers_ot_aerosol = self._aerosol_wl(band)
@@ -145,6 +145,7 @@ class Atmosphere():
         layers_ot_molecule = []
         layers_ot_rayleigh = []
         
+        
         layers_alts_bottom = self.layers_alts_bottom
         layers_alts_top = self.layers_alts_top
            
@@ -187,11 +188,14 @@ class Atmosphere():
     
             # Molecular absorption 
             T_molecule = s.outputs.transmittance_global_gas.upward 
+            T_gaz_total = s.outputs.transmittance_global_gas.total        #T_gas_total    : total gas transmittance (down+up) through the full column
+            
             tao_molecule = -np.log(T_molecule)
             
             # we keep last tao_molecule and tao_rayleigh for full atmosphere 
             layers_ot_molecule.append(tao_molecule)
             layers_ot_rayleigh.append(tao_rayleigh)
+            
                 
         
         # Convert 0-10, 0-20... to 0-10, 10-20...
@@ -222,7 +226,7 @@ class Atmosphere():
             relative_ray = layers_ot_rayleigh_new/np.sum(layers_ot_rayleigh_new)    
             layers_ot_rayleigh_new = tao_rayleigh * relative_ray
 
-        return layers_ot_molecule_new, layers_ot_rayleigh_new   
+        return layers_ot_molecule_new, layers_ot_rayleigh_new, T_gaz_total   
     
     # Extract aerosol profile at one wavelength 
     # Find the spectral dependence of AOT and then apply it to AOT550
