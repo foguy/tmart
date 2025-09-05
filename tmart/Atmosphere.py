@@ -136,7 +136,7 @@ class Atmosphere():
         else:
             atm_OT['ot_abs'] = self.specify_abs               
         
-        return atm_OT, aerosol_SPF
+        return atm_OT, aerosol_SPF, T_gaz_total
     
     # Extract the molecular profile at one wavelength 
     # Return two lists: ot_molecule and ot_rayleigh 
