@@ -70,6 +70,7 @@ class Tmart(Tmart2):
         self.wl = None
         self.atm_profile_wl = None # single wavelength 
         self.aerosol_SPF_wl = None 
+        self.T_gaz_total = None
         
         # Wind
         self.wind_speed = 3 # default 3 m/s
@@ -226,7 +227,7 @@ class Tmart(Tmart2):
         else:
             
             # Atmospheric profile and aerosol SPF
-            self.atm_profile_wl, self.aerosol_SPF_wl = self.Atmosphere._wavelength(self.wl,band)
+            self.atm_profile_wl, self.aerosol_SPF_wl, self.T_gaz_total = self.Atmosphere._wavelength(self.wl,band)
             
             # Fraction and reflectance of whitecaps 
             self.F_wc_wl, self.R_wc_wl = find_R_wc(wl=self.wl, wind_speed = self.wind_speed)
